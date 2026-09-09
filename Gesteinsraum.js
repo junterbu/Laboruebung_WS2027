@@ -27,15 +27,15 @@ let mischungsGrenzen = {
         obereGrenze: [9, 14.5, 20, 27, 35, 45, 55, 66, 72, 80, 88, 100, 100],
         untereGrenze: [4, 5.5, 7, 9, 13, 20, 27, 40, 47, 55, 70, 90, 100],
     },
-    "SMA 11 deck S3": {
-        obereGrenze: [9, 12, 15, 20, 25, 30, 38, 70, 100, 100, 100, 100, 100],
-        untereGrenze: [5, 6, 7, 8, 10, 15, 22, 45, 90, 100, 100, 100, 100],
-    },
+    // "SMA 11 deck S3": {
+    //     obereGrenze: [9, 12, 15, 20, 25, 30, 38, 70, 100, 100, 100, 100, 100],
+    //     untereGrenze: [5, 6, 7, 8, 10, 15, 22, 45, 90, 100, 100, 100, 100],
+    // },
     // Weitere Mischungen hier hinzufügen
 };
 
 let aktuelleGrenzen = mischungsGrenzen["Bitte klicken"]; // Standardwert
-let mixNames = ["Bitte klicken", "AC 11 deck A2", "AC 22 bin H1", "AC 32 trag T3", "SMA 11 deck S3"]
+let mixNames = ["Bitte klicken", "AC 11 deck A2", "AC 22 bin H1", "AC 32 trag T3"]
 let currentMixIndex = 0
 export let selectedMix ="Bitte klicken"
 
