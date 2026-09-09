@@ -247,7 +247,7 @@ function getHohlraumgehalt(maxKorn, eimeraktuell) {
     }
 
     // Neu: Hohlraumreduktion bei hohem Fülleranteil
-    const fillerAnteil = eimeraktuell['Füller'] || 0; 
+    const fillerAnteil = eimerWerte['Füller'] || 0; 
     if (fillerAnteil > 5) {
         baseValue -= 1.5; // Pauschaler Abzug, wenn viel Füller vorhanden ist
     }
@@ -342,7 +342,7 @@ export function multiplyMatrixVector(matrix, vector) {
 // Funktion zur Berechnung der Raumdichte
 function berechneRaumdichte(rhoRM, eimerWerte, y, HFB) {
     const maxKorn = berechneGroesstkorn(eimerWerte);
-    const hohlraumgehalt = getHohlraumgehalt(maxKorn);
+    const hohlraumgehalt = getHohlraumgehalt(maxKorn, eimerWerte);
 
     if (!hohlraumgehalt) {
         return Array(4).fill(null); // Wenn keine gültigen Werte, fülle mit null
