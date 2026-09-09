@@ -149,8 +149,6 @@ function animate() {
 
         if (action && action.isRunning() === false && !animationCompleted) {
             animationCompleted = true; // Setze den Status auf abgeschlossen
-            
-            let HFB = Math.random() * (85 - 75) + 75;
 
             let y=[];
             let Bx, By;
@@ -171,15 +169,19 @@ function animate() {
             }
 
             for (let i = 0; i < bitumengehalt.length; i++) {
-                y.push(findPoint(Bx, By, bitumengehalt[i]));
+                // selectedMix an findPoint übergeben
+                y.push(findPoint(Bx, By, bitumengehalt[i], selectedMix)); 
             }
         
             for (let i = 0; i < Rohdichten.length; i++) {
                 if (Rohdichten[i] !== null) {
-                    raumdichten[i] = berechneRaumdichte(Rohdichten[i], eimerWerte, y[i], HFB);
+                    // Neu: HFB steigt linear mit dem Bitumengehalt an, plus minimales Rauschen
+                    let dynamischerHFB = 65 + (bitumengehalt[i] * 3.5) + (Math.random() - 0.5);
+                    
+                    // Wichtig: In berechneRaumdichte musst du nun auch eimerWerte an getHohlraumgehalt weiterreichen!
+                    raumdichten[i] = berechneRaumdichte(Rohdichten[i], eimerWerte, y[i], dynamischerHFB);
                 }
             }
-
             context.clearRect(0, 0, canvas.width, canvas.height); // Lösche den alten Text
             context.font = '20px Arial'; // Kleinere Schrift für mehrere Werte
             let startX = 125;
@@ -230,32 +232,27 @@ init();
 
 
 // Funktion zur Berechnung von Hohlraumgehalt basierend auf Größtkorn mit Zufallsbereich
-function getHohlraumgehalt(maxKorn) {
-    // Werte für H_M,bit aus der Abbildung
+function getHohlraumgehalt(maxKorn, eimeraktuell) {
     const hohlraumTabelle = {
-        0: 0,
-        0.63: 28,
-        2: 24,
-        4: 20.2,
-        8: 17.2,
-        11: 14.4,
-        16: 12.4,
-        22: 11,
-        32: 10
+        0: 0, 0.63: 28, 2: 24, 4: 20.2, 8: 17.2, 11: 14.4, 16: 12.4, 22: 11, 32: 10
     };
 
-    const baseValue = hohlraumTabelle[maxKorn] || null; // Basiswert aus der Tabelle
+    let baseValue = hohlraumTabelle[maxKorn] || null;
+    
     if (baseValue === null) {
         updatePlaneText("kein Gestein ausgew.");
         return null;
     } else {
-        updatePlaneText("Marshall-Verdichter mit grünem Knopf starten")
+        updatePlaneText("Marshall-Verdichter mit grünem Knopf starten");
     }
 
-    // // Zufälligen Wert im Bereich +-0.5 hinzufügen
-    // const randomFactor = (1 - 0.95) * (Math.random()-0.5); // Bereich: [-0.025, 0.025]
-    // const randomizedValue = baseValue + randomFactor;
-    return baseValue; // Auf zwei Dezimalstellen runden
+    // Neu: Hohlraumreduktion bei hohem Fülleranteil
+    const fillerAnteil = eimeraktuell['Füller'] || 0; 
+    if (fillerAnteil > 5) {
+        baseValue -= 1.5; // Pauschaler Abzug, wenn viel Füller vorhanden ist
+    }
+
+    return baseValue; 
 }
 
 const eimeraktuell = eimerWerte
@@ -283,27 +280,23 @@ export function berechneGroesstkorn(eimeraktuell) {
 
 let sol = 0
 
-function findPoint(Bx, By, bitumenAnteil) {
-
+function findPoint(Bx, By, bitumenAnteil, aktuellerMix) {
     let Ax = Bx - 1;
-    let Ay = By - 0.05;
     let Cx = Bx + 1;
-    let Cy = By - 0.005;
 
-    // Erstelle die Matrix A und den Vektor B
-    let A = [
-        [Ax ** 2, Ax, 1],
-        [Bx ** 2, Bx, 1],
-        [Cx ** 2, Cx, 1]
-    ];
+    // Neu: Flankensteilheit abhängig vom Asphalt
+    let steilheit = 0.05; // Standardwert
+    if (aktuellerMix === "AC 32 trag T3") steilheit = 0.08; // Fällt schneller ab
+    if (aktuellerMix === "AC 11 deck A1") steilheit = 0.04; // Flachere Kurve
+
+    let Ay = By - steilheit;
+    let Cy = By - (steilheit / 10);
+
+    let A = [ [Ax ** 2, Ax, 1], [Bx ** 2, Bx, 1], [Cx ** 2, Cx, 1] ];
     let B = [Ay, By, Cy];
-
-    // Löse das lineare Gleichungssystem Ax = B für x (also für a, b, c)
     let [a, b, c] = solveLinearSystem(A, B);
 
-    // Berechne y-Wert für das gegebene x
-    let y = a * bitumenAnteil ** 2 + b * bitumenAnteil + c;
-    return y;
+    return a * bitumenAnteil ** 2 + b * bitumenAnteil + c;
 }
 
 // Funktion zur Lösung eines linearen Gleichungssystems (Matrix Inversion)
