@@ -154,7 +154,7 @@ function animate() {
             let Bx, By;
 
             // Bestimme die Werte für Bx und By basierend auf aktuellerAsphalt
-            if (selectedMix === "AC 11 deck A1") {
+            if (selectedMix === "AC 11 deck A2") {
                 Bx = 5 + 0.4 * Math.random();
                 By = 1
             } else if (selectedMix === "AC 22 bin H1") {
@@ -287,7 +287,7 @@ function findPoint(Bx, By, bitumenAnteil, aktuellerMix) {
     // Neu: Flankensteilheit abhängig vom Asphalt
     let steilheit = 0.05; // Standardwert
     if (aktuellerMix === "AC 32 trag T3") steilheit = 0.08; // Fällt schneller ab
-    if (aktuellerMix === "AC 11 deck A1") steilheit = 0.04; // Flachere Kurve
+    if (aktuellerMix === "AC 11 deck A2") steilheit = 0.04; // Flachere Kurve
 
     let Ay = By - steilheit;
     let Cy = By - (steilheit / 10);
