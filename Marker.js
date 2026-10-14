@@ -79,7 +79,7 @@ export const quizFragen = {
         punkte: 10
     },
     "Pyknometer": {
-        frage: "Wofür steht die Masse m_2 im Volumetrischen Verfahren zur Ermittlung der Rohdichte nach ÖNORM EN 12697-8?",
+        frage: "Wofür steht die Masse m_2 im Volumetrischen Verfahren zur Ermittlung der Rohdichte nach ÖNORM EN 12697-5?",
         optionen: ["Masse des Pyknometers mit Aufsatz, Feder und Laborprobe", "Masse des Pyknometers mit Aufsatz, Feder, Laborprobe und Wasser", "Masse des Pyknometers mit Aufsatz und Feder", "Volumen des Pyknometers bei Füllung bis zur Messmarke"],
         antwort: "Masse des Pyknometers mit Aufsatz, Feder und Laborprobe",
         punkte: 10
