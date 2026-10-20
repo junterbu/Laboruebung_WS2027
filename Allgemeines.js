@@ -93,8 +93,7 @@ export function isMobileDevice() {
 
 // Erstellen einer Instanz des DRACOLoaders (aktivieren wenn Datei mit Draco Komprimiert)
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); // Pfad zum Draco-Decoder (kann angepasst werden)
-
+dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.150.0/examples/jsm/libs/draco/gltf/');
 // Setup der Three.js Szene
 let scene = new THREE.Scene();
 

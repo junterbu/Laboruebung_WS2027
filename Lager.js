@@ -12,8 +12,7 @@ lagerproberaumMarker.visible = false;
 
 // Erstellen einer Instanz des DRACOLoaders
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/'); // Pfad zum Draco-Decoder (kann angepasst werden)
-
+dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.150.0/examples/jsm/libs/draco/gltf/');
 // GLTFLoader, um Modelle (Gebäude, Eimer, Siebturm) zu laden
 export const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader); //nur wenn datei mit Draco komprimiert!
